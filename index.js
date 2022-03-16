@@ -1,5 +1,5 @@
 const prompt = require("prompt-sync")();
-const plays = ["tesoura", "papel", "pedra"];
+const plays = ["pedra", "papel", "tesoura"];
 const counters = {
   userWins: 0,
   pcWins: 0,
@@ -7,9 +7,10 @@ const counters = {
 let breakLoop;
 while (breakLoop != "N") {
   console.clear();
-  let userRounds = prompt("Quantas rodadas você quer jogar?");
+  let userRounds = +prompt("Quantas rodadas você quer jogar? ");
   for (let index = 0; index < userRounds; index++) {
-    const userPlay = validation("Digite pedra, papel e tesoura: ");
+    const userPlay =
+      plays[validation("Escolha: [1] Pedra, [2] Papel, [3] Tesoura")];
     const pcPlay = plays[Math.trunc(Math.random() * 3)];
     if (
       (userPlay === "tesoura" && pcPlay === "papel") ||
@@ -55,10 +56,14 @@ while (breakLoop != "N") {
 }
 
 function validation(question) {
-  let response = prompt(question).toLowerCase().trim();
-  while (!plays.includes(response)) {
-    console.log("Favor colocar Pedra, Papel ou Tesoura");
-    response = prompt(question).toLowerCase().trim();
+  console.log(question);
+  let response = +prompt();
+  while (response > plays.length || response < 1) {
+    console.log("Favor escolher entre:");
+    console.log("[1] Pedra");
+    console.log("[2] Papel");
+    console.log("[3] Tesoura");
+    response = +prompt();
   }
-  return response;
+  return response - 1;
 }
