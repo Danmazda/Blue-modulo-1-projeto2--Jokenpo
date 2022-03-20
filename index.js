@@ -5,10 +5,14 @@ const plays = ["pedra", "papel", "tesoura"];
 const counters = {
   userWins: 0,
   pcWins: 0,
+  allPlays: 0,
+  allWins: 0,
+  allRounds: 0,
 };
 let breakLoop;
 while (breakLoop != "N") {
   console.clear();
+  counters.allPlays++;
   let userRounds = +prompt("Quantas rodadas você quer jogar? ");
   while (isNaN(userRounds)) {
     console.log("Insira um número para as rodadas!");
@@ -30,6 +34,7 @@ while (breakLoop != "N") {
       logResult("l", index, userPlay, pcPlay);
     }
   }
+  console.log();
   console.log(
     `De ${userRounds} rodadas Você ganhou: ${counters.userWins} e o Pc ganhou: ${counters.pcWins}`
   );
@@ -50,11 +55,25 @@ while (breakLoop != "N") {
       )
     );
   }
-  breakLoop = prompt("Deseja jogar mais rodadas? [N] para sair.")
+  breakLoop = prompt("Deseja jogar mais rodadas? [N] para sair.  ")
     .trim()
     .slice(0, 1)
     .toUpperCase();
+  counters.allWins += counters.userWins;
+  counters.allRounds += userRounds;
 }
+
+console.log("RESULTADOS FINAIS: ");
+console.log(
+  chalk.bgCyanBright.black(
+    `De ${counters.allPlays} jogadas e ${counters.allRounds} rodadas você ganhou um total de: ${counters.allWins} rodadas!!`
+  )
+);
+console.log(
+  chalk.bgGreenBright.black(
+    "Volte depois para tentar atingir um número maior! :)"
+  )
+);
 
 function validateChoice(question) {
   console.log(question);
@@ -69,27 +88,25 @@ function validateChoice(question) {
   return response - 1;
 }
 
-//Recebe w - win
+//Recebe
+// w - win
 // d- draw
 // l - lose
 function logResult(result, index, userPlay, pcPlay) {
   console.log();
+  const showPlays = chalk.bgYellow.black(
+    `Você jogou: ${userPlay.toUpperCase()} e o PC jogou: ${pcPlay.toUpperCase()}!`
+  );
   if (result == "w") {
     console.log(chalk.green(`Você GANHOU a rodada ${index + 1}!`));
-    console.log(
-      `Você jogou: ${userPlay.toUpperCase()} e o PC jogou: ${pcPlay.toUpperCase()}!`
-    );
+    console.log(showPlays);
     counters.userWins++;
   } else if (result == "l") {
     console.log(chalk.red(`Você PERDEU a rodada ${index + 1}!`));
-    console.log(
-      `Você jogou: ${userPlay.toUpperCase()} e o PC jogou: ${pcPlay.toUpperCase()}!`
-    );
+    console.log(showPlays);
     counters.pcWins++;
   } else {
     console.log(chalk.blue(`Você EMPATOU a rodada ${index + 1}!`));
-    console.log(
-      `Você jogou: ${userPlay.toUpperCase()} e o PC jogou: ${pcPlay.toUpperCase()}!`
-    );
+    console.log(showPlays);
   }
 }
